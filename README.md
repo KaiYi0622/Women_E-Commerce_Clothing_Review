@@ -32,10 +32,9 @@ Besides, both unsupervised and supervised learning techniques are used:
 | 9. | Department Name | Categorical name of the product department name. | Intimate, Dresses, Bottoms, Tops, Jackets, Trend | 6 |
 | 10. | Class Name | Categorical name of the product class name. | Intimates, Dresses, Pants, Blouses, Knits, Outerwear, Lounge, Sweaters, Skirts, Fine gauge, Jackets, Swim, Sleep, Trend, Jeans, Legwear, Layering, Shorts | 20 |
 
-## 3.0 Data Understanding
 
-## 4.0 Pre-Processing
-### 4.1 Data Cleaning
+## 3.0 Pre-Processing
+### 3.1 Data Cleaning
 1. Features “Recommended.IND” and “Review.Text” are renamed with
 “Recommended” and “Review” respectively.
 > colnames(df)[colnames(df) == "Recommended.IND"] = "Recommended"
@@ -63,7 +62,7 @@ respectively.
 
 > df = df[!df$Review == "",]
 
-### 4.2 Review Text Processing
+### 3.2 Review Text Processing
 Libraries “tm” and “SnowballC” are used.
 Summary of actions took in the stage of processing review text:
 1. Text documentation collection is done by using VCorpus(VectorSource()).
@@ -81,3 +80,12 @@ TF-IDF.
 11. Sparse words, which are the lower occurrence words in the Document Term Matrix
 are removed to reduce the dimensionality of the matrix.
 12. The Document Term Matrix eventually is saved as a data frame.
+
+## 4.0 Data Understanding
+### 4.1 Term Frequency Analysis
+
+### 4.2 Decision on Target Variable
+
+
+### 4.3 Exploratory Data Analysis
+
