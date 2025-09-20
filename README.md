@@ -36,30 +36,30 @@ Besides, both unsupervised and supervised learning techniques are used:
 ### 3.1 Data Cleaning
 1. Features “Recommended.IND” and “Review.Text” are renamed with
 “Recommended” and “Review” respectively.
-> colnames(df)[colnames(df) == "Recommended.IND"] = "Recommended"
+   > colnames(df)[colnames(df) == "Recommended.IND"] = "Recommended"
 
-> colnames(df)[colnames(df) == "Review.Text"] = "Review"
+   > colnames(df)[colnames(df) == "Review.Text"] = "Review"
 
 2. Value in feature “Recommended” is changed from 0 and 1 to “no” and “yes”
 respectively.
-> df$Recommended = ifelse(df$Recommended == 0,"no","yes")
+   > df$Recommended = ifelse(df$Recommended == 0,"no","yes")
 
 3. Data type of feature “Rating”, “Recommended”, “Division.Name”, “Department.Name”, “Class.Name” are changed from integer to categorical type.
-> col_fac = c("Rating", "Recommended", "Division.Name", "Department.Name", "Class.Name")
+   > col_fac = c("Rating", "Recommended", "Division.Name", "Department.Name", "Class.Name")
 
-> df[col_fac] = lapply(df[col_fac], factor)
+   > df[col_fac] = lapply(df[col_fac], factor)
 
 4. Remove unnecessary columns 
-> df$Title = NULL
+   > df$Title = NULL
 
-> df$Clothing.ID = NULL
+   > df$Clothing.ID = NULL
 
-> df$X = NULL
+   > df$X = NULL
    
 5. Rows with missing values and empty string (“”) are removed.
-> df[apply(is.na(df),1,sum)>0,]
+   > df[apply(is.na(df),1,sum)>0,]
 
-> df = df[!df$Review == "",]
+   > df = df[!df$Review == "",]
 
 <br>
 
@@ -76,31 +76,61 @@ In the perspective of business, we could analyze the review in different views:
 
 <br> 
 
-### 3.2 Review Text Processing
+### 3.3 Text Processing
 Libraries “tm” and “SnowballC” are used.
 Summary of actions took in the stage of processing review text:
 1. Text documentation collection is done by using VCorpus(VectorSource()).
 2. Short words with length smaller than or equals to 2 in the review text are removed.
-3. Extra whitespaces are removed in the review text.
-4. All the words in the review text are converted to lowercase.
-5. Numeric characters in the review text are removed.
-6. Punctuations in the review text are removed.
-7. English stopwords in the review text are removed
-8. A clean text function which removes mentions, urls, emojis, numbers, punctuation
-etc. is applied towards the review text.
-9. Stemming is applied towards review text to reduce words to their root form.
-10. All the review text is then converted to Document Term Matrix and weighted with
-TF-IDF.
-11. Sparse words, which are the lower occurrence words in the Document Term Matrix
-are removed to reduce the dimensionality of the matrix.
-12. The Document Term Matrix eventually is saved as a data frame.
+   > remove_short_words = function(x) {
+   > words = unlist(strsplit(x, "\\s+"))
+   > words = words[nchar(words) > 2]
+   > paste(words, collapse = " ")}
 
+   > corpus = tm_map(corpus, content_transformer(remove_short_words))
+3. Extra whitespaces are removed in the review text.
+   > corpus = tm_map(corpus, stripWhitespace) 
+4. All the words in the review text are converted to lowercase.
+   > corpus = tm_map(corpus, content_transformer(tolower))
+5. Numeric characters in the review text are removed.
+   > corpus = tm_map(corpus, removeNumbers)
+6. Punctuations in the review text are removed.
+   > corpus = tm_map(corpus, removePunctuation)
+7. English stopwords (eg. articles:a, an, the; conjunctions:and,but,or) in the review text are removed.
+    > corpus = tm_map(corpus, removeWords, stopwords("en"))
+8. A clean text function which removes mentions, urls, emojis, numbers, punctuation etc. is applied towards the review text.
+    > clean_text = function(text) {
+    > text = gsub("@\\w+", "", text)
+    > text = gsub("https?://.+", "", text)
+    > text = gsub("\\d+\\w*\\d*", "", text)
+    > text = gsub("#\\w+", "", text)
+    > text = gsub("[^\x01-\x7F]", "", text)
+    > text = gsub("[[:punct:]]", " ", text)
+    > return(text)}
+
+    > corpus = tm_map(corpus, content_transformer(clean_text))
+9. Stemming is applied towards review text to reduce words to their root form.
+    > corpus = tm_map(corpus, stemDocument, language="english")
+10. All the review text is then converted to Document Term Matrix and weighted with TF-IDF.
+    > dtm = DocumentTermMatrix(corpus, control = list(weighting = weightTfIdf))
+11. Sparse words, which are the lower occurrence words in the Document Term Matrix are removed to reduce the dimensionality of the matrix.
+    > dtm = removeSparseTerms(dtm, .995)
+12. The Document Term Matrix eventually is saved as a data frame.
+    > tfidf_df = as.data.frame(as.matrix(dtm))
 
 ## 4.0 Data Understanding
-### 4.1 Feature Importance
+### 4.1 Term Frequency analysis
+<p align="Center"><img src = "images/Most_Frequent_Word.png" style="width:60%;height:auto;"><br>
+Bar Chart of the Top 20 Most Frequent Words</p>
 
-### 4.2 Term Frequency analysis
+We could interpret the following from this bar chart:
+- The most frequently occurring word is “dress”. This indicates customers give a lot offeedback on the dress of the online clothing store.
+- “love”, “fit” and “size” are the next three most frequently occurring words, which indicate that most people possibly love and feel good about the fit and size of the clothes.
+- We could see that positive words like “love”, “like”, “great”, “perfect”, “nice” appearreally frequently, indicating most reviews could be positive ones.
 
+Next, a word cloud is plotted to show a better visualisation on frequent words in the dataset.
+<p align="Center"><img src = "images/Word_Cloud.png" style="width:50%;height:auto;"></p>
+
+### 4.2 Sentiment Analysis
 
 ### 4.3 Exploratory Data Analysis
 
