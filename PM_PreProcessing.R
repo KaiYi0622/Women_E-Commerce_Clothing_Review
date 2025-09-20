@@ -39,6 +39,57 @@ summary(df)
 
 
 #==============================================================
+# 			                FEATURE IMPORTANCE
+# 			               LOGISTIC REGRESSION
+#
+# 		            TARGET VARIABLE: RECOMMENDED
+#
+#==============================================================
+# OBJECTIVE: To determine target variable
+
+# Remove rows with empty strings for division, department, class features
+sum(df$Division.Name == "")
+sum(df$Department.Name == "")
+sum(df$Class.Name == "")
+all(df[df$Department.Name == "", ] == df[df$Class.Name == "", ])
+all(df[df$Department.Name == "", ] == df[df$Division.Name == "", ])
+df = df[df$Department.Name != "",]
+col_fac = c("Division.Name", "Department.Name", "Class.Name")
+df[col_fac] = lapply(df[col_fac], factor)
+summary(df)
+# remove Review column
+df_filtered = df[, -c(2,8)]
+head(df_filtered)
+set.seed(123)
+rec_0 = df_filtered[df_filtered$Recommended=="no", ]
+rec_1 = df_filtered[df_filtered$Recommended=="yes", ]
+rec0_idx = sample(nrow(rec_0), size=round(0.7*nrow(rec_0)))
+rec1_idx = sample(nrow(rec_1), size=round(0.7*nrow(rec_1)))
+df.train = rbind(rec_0[ rec0_idx,], rec_1[ rec1_idx,])
+df.test = rbind(rec_0[-rec0_idx,], rec_1[-rec1_idx,])
+rm(rec_0)
+rm(rec_1)
+rm(rec0_idx)
+rm(rec1_idx)
+log_reg_model = glm(Recommended ~., data = df.train, family = binomial)
+summary(log_reg_model)
+
+# -------------------------------------------------------------
+# 			                using ElasticNet
+# -------------------------------------------------------------
+library(glmnet) # install.packages("glmnet")
+X = model.matrix(Recommended ~., data=df.train)[,-1]
+glmmod = glmnet(x=X, y=df.train$Recommended , alpha=1, family=binomial, lambda=1e-5)
+print(coef(glmmod))
+glmmod = glmnet(x=X, y=df.train$Recommended, alpha=1, family="binomial")
+plot(glmmod, lwd=5) # The x-axis defaults to L1-Norm
+plot(glmmod, lwd=5, xvar="lambda")
+legend("topright", legend = colnames(X), col = 1:length(coef(glmmod)), lwd = 4,
+cex = 0.8)
+
+
+
+#==============================================================
 #                    Review Text Processing
 #==============================================================
 #install.packages("tm")
@@ -263,3 +314,4 @@ barplot(class_distribution_rose, main="Class Distribution after Oversampling", x
 
 X_train_rose = as.matrix(oversampled_data[, -ncol(oversampled_data)])  # Exclude the last column (Recommended)
 y_train_rose = oversampled_data$Recommended
+
