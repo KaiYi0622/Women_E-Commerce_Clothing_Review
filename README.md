@@ -72,7 +72,7 @@ In the perspective of business, we could analyze the review in different views:
 - Recommended (Yes/No): To evaluate whether the customers are recommending the clothes
 - Rating (1-5): To evaluate the range of satisfaction towards the clothes
 
-Hence, we choose both Recommeded and Rating as the target variables in this project.
+**Hence, we choose both Recommeded and Rating as the target variables in this project.**
 
 <br> 
 
