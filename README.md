@@ -32,7 +32,6 @@ Besides, both unsupervised and supervised learning techniques are used:
 | 9. | Department Name | Categorical name of the product department name. | Intimate, Dresses, Bottoms, Tops, Jackets, Trend | 6 |
 | 10. | Class Name | Categorical name of the product class name. | Intimates, Dresses, Pants, Blouses, Knits, Outerwear, Lounge, Sweaters, Skirts, Fine gauge, Jackets, Swim, Sleep, Trend, Jeans, Legwear, Layering, Shorts | 20 |
 
-
 ## 3.0 Pre-Processing
 ### 3.1 Data Cleaning
 1. Features “Recommended.IND” and “Review.Text” are renamed with
@@ -62,6 +61,21 @@ respectively.
 
 > df = df[!df$Review == "",]
 
+<br>
+
+### 3.2 Determine Target Variable based on Feature Importance
+Based on the result from Logistic Regression and ElasticNet graph, it can be obviously observed that the Rating variable is highly correlated to Recommended, which we initially pick as the target variable in this project. 
+![Feature_Importance](images/Feature_Importance_Result.png)
+<img src = "images/Elastic_Net.png" style="width:60%;height:auto;">
+
+In the perspective of business, we could analyze the review in different views:
+- Recommended (Yes/No): To evaluate whether the customers are recommending the clothes
+- Rating (1-5): To evaluate the range of satisfaction towards the clothes
+
+Hence, we choose both Recommeded and Rating as the target variables in this project.
+
+<br> 
+
 ### 3.2 Review Text Processing
 Libraries “tm” and “SnowballC” are used.
 Summary of actions took in the stage of processing review text:
@@ -81,10 +95,11 @@ TF-IDF.
 are removed to reduce the dimensionality of the matrix.
 12. The Document Term Matrix eventually is saved as a data frame.
 
-## 4.0 Data Understanding
-### 4.1 Term Frequency Analysis
 
-### 4.2 Decision on Target Variable
+## 4.0 Data Understanding
+### 4.1 Feature Importance
+
+### 4.2 Term Frequency analysis
 
 
 ### 4.3 Exploratory Data Analysis
