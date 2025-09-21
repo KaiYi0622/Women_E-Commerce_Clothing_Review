@@ -18,6 +18,8 @@ Besides, both unsupervised and supervised learning techniques are used:
    - Support Vector Machine (SVM)
    - Random Forest
 
+<br>
+
 ## 2.0 Data Dictionary
 | No | Feature | Description | Values | Unique Count |
 | ---| --- | --- | --- | --- | 
@@ -31,6 +33,8 @@ Besides, both unsupervised and supervised learning techniques are used:
 | 8. | Division Name | Categorical name of the product high level division. | Intimates, General, General Petite | 3 |
 | 9. | Department Name | Categorical name of the product department name. | Intimate, Dresses, Bottoms, Tops, Jackets, Trend | 6 |
 | 10. | Class Name | Categorical name of the product class name. | Intimates, Dresses, Pants, Blouses, Knits, Outerwear, Lounge, Sweaters, Skirts, Fine gauge, Jackets, Swim, Sleep, Trend, Jeans, Legwear, Layering, Shorts | 20 |
+
+<br>
 
 ## 3.0 Pre-Processing
 ### 3.1 Data Cleaning
@@ -74,7 +78,7 @@ In the perspective of business, we could analyze the review in different views:
 
 **Hence, we choose both Recommeded and Rating as the target variables in this project.**
 
-<br> 
+<br>
 
 ### 3.3 Text Processing
 Libraries “tm” and “SnowballC” are used.
@@ -117,6 +121,8 @@ Summary of actions took in the stage of processing review text:
 12. The Document Term Matrix eventually is saved as a data frame.
     > tfidf_df = as.data.frame(as.matrix(dtm))
 
+<br>
+
 ## 4.0 Data Understanding
 ### 4.1 Term Frequency analysis
 <p align="Center"><img src = "images/Most_Frequent_Word.png" style="width:60%;height:auto;"><br>
@@ -130,7 +136,37 @@ We could interpret the following from this bar chart:
 Next, a word cloud is plotted to show a better visualisation on frequent words in the dataset.
 <p align="Center"><img src = "images/Word_Cloud.png" style="width:50%;height:auto;"></p>
 
+#### **Word Association**
+Correlation able to show whether and how strongly pairs of variables are related. This method can be used effectively to determine which words are most frequently used in association with the most common terms in the survey responses, which aids in understanding the context around these words. (Mhatre, 2020).
+
+For example, we do a word association analysis for the top 3 most frequent terms
+> findAssocs(tdm, terms = c("dress","fit","love"), corlimit = 0.10)
+<p><img src = "images/Word_Association_Example.png" style="width:50%;height:auto;"></p>
+
+- The output indicates that “slip”, “wed”, “knee”, “can” occur within the range of 11% to 16% of the time with the word “dress”. We could interpret it to mean that probably a lot of people comment on the slip dress. 
+- Similarly, the root of the words “perfect”, “size”, “loos”(root for word “loose”), “well” are highly correlated with the word “fit”. This indicates that most responses are saying that the size of the clothes is perfect, well and true and maybe some find it to be loose.
+
+Hence, let us plot the word assoctiation network for the Top 20 Frequent Words.
+<p align="Center"><img src = "images/Word_Association_Network.png" style="width:60%;height:auto;"><br>
+Word Association Network of the Top 20 Most Frequent Words</p>
+
+- The thicker the edges, the stronger the correlation between the words.
+- We could found that:
+   - The mojor discussion of the customer is about size, as words such as fit, true, usual, normal, order, small, medium, chest, waist, lbs are tightly clustered.
+   - Majority of the customer review the clothing (probably is the glove) is really look like the model (probable same as the picture). However, the thin edge with the word "dont" suggest there are fewer negative comments.
+   - Customers frequently discuss colors, often with positive connotations (vibrant, rich, bright).
+
+<br>
+
 ### 4.2 Sentiment Analysis
 
+
+### 4.3 Emotional Analysis
+
 ### 4.3 Exploratory Data Analysis
+
+
+
+### References
+Mhatre. S. (2020). Text Mining and Sentiment Analysis: Analysis with R. Redgate. https://www.red-gate.com/simple-talk/databases/sql-server/bi-sql-server/text-mining-a nd-sentiment-analysis-with-r/
 
