@@ -134,6 +134,7 @@ inspect(dtm)
 
 tfidf_df = as.data.frame(as.matrix(dtm))
 
+
 #==============================================================
 #                     Term Frequency Analysis
 #==============================================================
@@ -173,10 +174,50 @@ wordcloud(words = df_term$term, freq = df_term$freq, min.freq = 5,
           colors=brewer.pal(8, "Dark2"))
 
 
-# Find associations 
+# -------------------------------------------------------------
+# 			            Find associations 
+# -------------------------------------------------------------
+#install.packages("igraph")
+#install.packages("ggraph)
+library(igraph)
+library(ggraph)
 findAssocs(tdm, terms = c("dress","fit","love"), corlimit = 0.10)	
 
-# Sentiment 
+# Create Network Graph for Top20 Frequent Word
+assoc_list <- lapply(top_words$term, function(w) {
+   # run safely for each word
+   tryCatch({
+     out <- findAssocs(tdm, terms = w, corlimit = 0.1)[[1]]
+ if (!is.null(out)) {
+       data.frame(
+         main_word = w,
+         assoc_word = names(out),
+         correlation = out,
+         stringsAsFactors = FALSE
+       )
+     }
+   }, error = function(e) NULL)
+ })
+ 
+assoc_df <- do.call(rbind, assoc_list)
+head(assoc_df)	
+
+# Build igraph object
+g <- graph_from_data_frame(assoc_df, directed = FALSE)
+
+# Plot network with ggraph
+ggraph(g, layout = "fr") + 
+   geom_edge_link(aes(width = correlation), edge_colour = "gray70", alpha = 0.8) +
+   geom_node_point(color = "tomato", size = 5, alpha = 0.9) +
+   geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+   scale_edge_width(range = c(0.5, 2)) +
+   theme_void() +
+   ggtitle("Word Association Network (Top Frequent Terms)")
+
+  
+# -------------------------------------------------------------
+# 			              Sentiment 
+# -------------------------------------------------------------
 library(syuzhet)
 syuzhet_vector = get_sentiment(d.f$clean_text, method="syuzhet")
 head(syuzhet_vector)
@@ -199,7 +240,9 @@ rbind(
 )
 
 
-# Emotion
+# -------------------------------------------------------------
+# 				                  Emotion
+# -------------------------------------------------------------
 # Takes a long time to execute
 d = get_nrc_sentiment(d.f$clean_text)
 # to see top 10 lines of the get_nrc_sentiment dataframe
@@ -314,4 +357,5 @@ barplot(class_distribution_rose, main="Class Distribution after Oversampling", x
 
 X_train_rose = as.matrix(oversampled_data[, -ncol(oversampled_data)])  # Exclude the last column (Recommended)
 y_train_rose = oversampled_data$Recommended
+
 
