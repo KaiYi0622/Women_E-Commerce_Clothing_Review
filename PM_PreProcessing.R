@@ -223,15 +223,81 @@ syuzhet_vector = get_sentiment(d.f$clean_text, method="syuzhet")
 head(syuzhet_vector)
 # see summary statistics of the vector
 summary(syuzhet_vector)
+
+df_syuzhet = data.frame(score = syuzhet_vector)
+
+ggplot(df_syuzhet, aes(x = score)) +
+   geom_histogram(aes(y = ..density..), 
+                  binwidth = 0.5, 
+                  fill = "skyblue", 
+                  color = "black", 
+                  alpha = 0.6) +
+   geom_density(color = "red", size = 1.2) +
+   labs(
+     title = "Sentiment Score Distribution (Syuzhet Method)",
+     x = "Sentiment Score",
+     y = "Density"
+   ) +
+   theme_minimal()  
+
 # bing
 bing_vector = get_sentiment(d.f$clean_text, method="bing")
 head(bing_vector)
 summary(bing_vector)
+
+library(gridExtra)
+
+# 1st Plot: Histogram + Density
+p1 = ggplot(data.frame(score = bing_vector), aes(x = score)) +
+   geom_histogram(aes(y = ..density..), binwidth = 1,
+                  fill = "skyblue", color = "black", alpha = 0.7) +
+   geom_density(color = "red", size = 1) +
+   labs(title = "Distribution of Sentiment Scores (Bing)",
+        x = "Sentiment Score", y = "Density") +
+   theme_minimal()
+ 
+# 2nd Plot: Sentiment Classification with Percentages 
+bing_sentiment_class = ifelse(bing_vector > 0, "Positive",
+                           ifelse(bing_vector < 0, "Negative", "Neutral"))
+ 
+df_bing_class = as.data.frame(table(bing_sentiment_class))
+df_bing_class$Percent = round(100 * df_bing_class$Freq / sum(df_bing_class$Freq), 1)
+ 
+p2 = ggplot(df_bing_class, aes(x = bing_sentiment_class, y = Percent, fill = bing_sentiment_class)) +
+   geom_col() +
+   geom_text(aes(label = paste0(Percent, "%")), vjust = -0.5, size = 5) +
+   scale_fill_manual(values = c("Negative" = "red", "Neutral" = "gray", "Positive" = "green")) +
+   labs(title = "Sentiment Classification (Bing)", x = "Sentiment", y = "Percentage") +
+   theme_minimal() +
+   expand_limits(y = max(df_bing_class$Percent) + 10)
+
+grid.arrange(p1, p2, nrow = 2)
+
+  
 #affin
 afinn_vector = get_sentiment(d.f$clean_text, method="afinn")
 head(afinn_vector)
 summary(afinn_vector)
 
+df_afinn = data.frame(score = afinn_vector)
+
+p3 = ggplot(df_afinn, aes(x = score)) +
+    geom_histogram(aes(y = ..density..), binwidth = 1,
+                   fill = "skyblue", color = "black", alpha = 0.7) +
+    geom_density(color = "red", size = 1) +
+    labs(title = "Distribution of Sentiment Scores (Affin)",
+         x = "Sentiment Score", y = "Density") +
+    theme_minimal()
+
+# Boxplot
+p4 = ggplot(df_afinn, aes(x = score)) +
+  geom_boxplot(fill = "skyblue", color = "black") +
+  labs(title = "Boxplot of AFINN Sentiment Scores", x = "Sentiment Score") +
+  theme_minimal()
+
+grid.arrange(p3, p4, nrow = 2)
+
+  
 #compare the first row of each vector using sign function
 rbind(
   sign(head(syuzhet_vector)),
@@ -239,6 +305,34 @@ rbind(
   sign(head(afinn_vector))
 )
 
+# Compare the vectors to see their pairwise agreement
+comparison = data.frame(
+   syuzhet = sign(syuzhet_vector),
+   bing    = sign(bing_vector),
+   afinn   = sign(afinn_vector)
+)
+
+comparison$all_agree = with(comparison, syuzhet == bing & bing == afinn)
+pairwise_agreement <- data.frame(
+   Pair = c("Syuzhet vs Bing", "Syuzhet vs Afinn", "Bing vs Afinn"),
+   Agreement = c(
+     mean(comparison$syuzhet == comparison$bing)  * 100,
+     mean(comparison$syuzhet == comparison$afinn) * 100,
+     mean(comparison$bing    == comparison$afinn) * 100
+   )
+ )
+
+#install.packages("reshape2")
+library(reshape2)
+
+ggplot(pairwise_agreement, aes(x = Pair, y = Agreement, fill = Pair)) +
+   geom_col(width = 0.5) +
+   geom_text(aes(label = paste0(round(Agreement, 1), "%")), vjust = -0.5) +
+   ylim(0, 100) +
+   labs(title = "Pairwise Agreement Between Sentiment Lexicons",
+        y = "Agreement (%)", x = "")
+
+  
 
 # -------------------------------------------------------------
 # 				                  Emotion
@@ -357,5 +451,6 @@ barplot(class_distribution_rose, main="Class Distribution after Oversampling", x
 
 X_train_rose = as.matrix(oversampled_data[, -ncol(oversampled_data)])  # Exclude the last column (Recommended)
 y_train_rose = oversampled_data$Recommended
+
 
 
