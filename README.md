@@ -213,21 +213,73 @@ Affin packages able to detect the strength of emotions, which scale range in bet
 
 > head(afinn_vector)
 
-<p><img src = "images/Head_Affin.png" style="width:20%;height:auto;">
+<p><img src = "images/Head_Affin.png" style="width:20%;height:auto;"></p>
 
 > summary(afinn_vector)
 
-<p><img src = "images/Summary_Affin.png" style="width:40%;height:auto;">
+<p><img src = "images/Summary_Affin.png" style="width:40%;height:auto;"></p>
 
 So we have,
-<p align="Center"><img src = "images/Afinn_Visualisation.png" style="width:50%;height:auto;">
+<p align="Center"><img src = "images/Afinn_Visualisation.png" style="width:50%;height:auto;"></p>
 
 **From the summary and visualisation, we could summarize that:**
+- The customers generally provide a very positive review.
 
+<br> 
 
+**Pairwise Agreement**
 
+<p align="Center"><img src = "images/Comparison_between_Sentiment_Vector.png" style="width:50%;height:auto;"></p>
+Based on the pairwise agreement between three methods, all these vectors have shows a high level consistency(>85%) in detecting sentiment polarity across the data set. Hence, we can conclude that the sentiment analysis results are reliable and not strongly dependent on a single lexicon.
+
+<br>
 
 ### 4.3 Emotional Analysis
+We also able to classify the emotions based on the words.
+> head (emotion,10)
+
+<p><img src = "images/Head_Emotion.png" style="width:40%;height:auto;"></p>
+
+For example, the first line of text has:
+- Zero occurrences of words associated with emotions of anger, disgust, fear, sadness
+and surprise
+- One occurrence each of words associated with emotions of anticipation, joy and trust
+- Total of zero occurrence of words associated with negative emotions
+- Total of one occurrences of words associated with positive emotions
+
+<br>
+
+**Bar Chart showing the count of words in the text, associated with each emotion**
+<p align="Center"><img src = "images/Review_Text_Sentiment_Emotion.png" style="width:50%;height:auto;"></p>
+
+Based on the bar chart:
+- Customers show trust in the clothing product as the emotion "trust" occured close to 500 times in the reviews.
+- There are a small portion shows anger and disgust on the product.
+
+<br>
+
+**Bar Plot showing the count of words associated with each sentiment expressed as a percentage**
+<p align="Center"><img src = "images/Emotion_in_Text_Percentage.png" style="width:50%;height:auto;"></p>
+
+Based on the bar chart:
+- The emotion "trust" has the longest bar, which demonstrates that words that express this positive feeling account for over 25% of all the meaningful words in this text.
+- "disgust" has the shortest bar, indicating that less than 5% of the text's relevant words are related with this unpleasant emotion.
+- Hence, around 70% of the meaningful terms of the text are words related to the nice feelings of "trust", "anticipation" and "joy" which can be seen as a positive indicator for the online clothing store.
+
+<br>
+
+### 4.4 Class Distribution
+<p align="Center"><img src = "images/Class_Distribution_Original.png" style="width:50%;height:auto;"></p>
+
+Based on the chart above, we noticed that the class distribution for the Recommend Target Variable is inbalance and the inbalance will cause bias to positive comments. Hence, we applied oversample using ROSE technique towards the models that we built later to see whether it helps to improve the performance of the models.
+
+**Oversampling (ROSE)**
+- The core of the package is the function ROSE, which creates artificial balanced samples and enables you to enhance any binary classifier's subsequent estimation. 
+- A bootstrap-based method called ROSE (RandomOver-SamplingExamples) facilitates binary classification in the presence of rare classes.
+- Through the creation of synthetic examples from a conditional density estimate of the two classes, it can handle both continuous and categorical data.
+- In addition, the function ovun.sample employs traditional solutions to the class imbalance, such as over-sampling the minority class, under-sampling the majority class, or combining bothover- and under-sampling. 
+
+
 
 ### 4.3 Exploratory Data Analysis
 
