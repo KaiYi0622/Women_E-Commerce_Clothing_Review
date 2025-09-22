@@ -219,7 +219,7 @@ ggraph(g, layout = "fr") +
 # 			              Sentiment 
 # -------------------------------------------------------------
 library(syuzhet)
-syuzhet_vector = get_sentiment(d.f$clean_text, method="syuzhet")
+syuzhet_vector = get_sentiment(df$clean_text, method="syuzhet")
 head(syuzhet_vector)
 # see summary statistics of the vector
 summary(syuzhet_vector)
@@ -241,7 +241,7 @@ ggplot(df_syuzhet, aes(x = score)) +
    theme_minimal()  
 
 # bing
-bing_vector = get_sentiment(d.f$clean_text, method="bing")
+bing_vector = get_sentiment(df$clean_text, method="bing")
 head(bing_vector)
 summary(bing_vector)
 
@@ -275,7 +275,7 @@ grid.arrange(p1, p2, nrow = 2)
 
   
 #affin
-afinn_vector = get_sentiment(d.f$clean_text, method="afinn")
+afinn_vector = get_sentiment(df$clean_text, method="afinn")
 head(afinn_vector)
 summary(afinn_vector)
 
@@ -338,7 +338,7 @@ ggplot(pairwise_agreement, aes(x = Pair, y = Agreement, fill = Pair)) +
 # 				                  Emotion
 # -------------------------------------------------------------
 # Takes a long time to execute
-d = get_nrc_sentiment(d.f$clean_text)
+d = get_nrc_sentiment(df$clean_text)
 # to see top 10 lines of the get_nrc_sentiment dataframe
 head (d,10)
 
@@ -451,6 +451,7 @@ barplot(class_distribution_rose, main="Class Distribution after Oversampling", x
 
 X_train_rose = as.matrix(oversampled_data[, -ncol(oversampled_data)])  # Exclude the last column (Recommended)
 y_train_rose = oversampled_data$Recommended
+
 
 
 
