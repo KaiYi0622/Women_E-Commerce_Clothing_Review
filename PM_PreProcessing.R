@@ -338,12 +338,12 @@ ggplot(pairwise_agreement, aes(x = Pair, y = Agreement, fill = Pair)) +
 # 				                  Emotion
 # -------------------------------------------------------------
 # Takes a long time to execute
-d = get_nrc_sentiment(df$clean_text)
+emotion = get_nrc_sentiment(df$clean_text)
 # to see top 10 lines of the get_nrc_sentiment dataframe
-head (d,10)
+head (emotion,10)
 
 #transpose
-td = data.frame(t(d))
+td = data.frame(t(emotion))
 #The function rowSums computes column sums across rows for each level of a grouping variable.
 td_new = data.frame(rowSums(td[2:253]))
 #Transformation and cleaning
@@ -451,6 +451,7 @@ barplot(class_distribution_rose, main="Class Distribution after Oversampling", x
 
 X_train_rose = as.matrix(oversampled_data[, -ncol(oversampled_data)])  # Exclude the last column (Recommended)
 y_train_rose = oversampled_data$Recommended
+
 
 
 
