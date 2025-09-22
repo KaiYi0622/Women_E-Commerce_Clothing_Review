@@ -159,6 +159,33 @@ Word Association Network of the Top 20 Most Frequent Words</p>
 <br>
 
 ### 4.2 Sentiment Analysis
+Sentiments can be classified as positive, neutral or negative. In order to more accurately convey the strength of the sentiment included in a body of text, they can also be expressed on a numerical scale.
+
+**Syuzhet vector**
+
+Syuzhet package can be used to measures emotional valence
+> syuzhet_vector = get_sentiment(df$clean_text, method="syuzhet")
+
+> head(syuzhet_vector)
+
+<p><img src = "images/Head_Syuzhet.png" style="width:40%;height:auto;">
+
+The meaning of sentiment scores:
+- Positive - Positive sentiment
+- Negetive - Negative sentiment
+
+> summary(syuzhet_vector)
+
+<p><img src = "images/Summary_Syuzhet.png" style="width:40%;height:auto;">
+
+To have a better visualisation, we plot a histogram with dentsity:
+<p align="Center"><img src = "images/Syuzhet_Distribution.png" style="width:50%;height:auto;">
+
+**From the summary and histogram, we could summarize that:**
+- **Most reviews are positive** -> The median (1.85) and mean (1.95) are clearly above 0 and most of the scores are between 1 and 3.
+- **Strong positivity exists** -> The max score is 7.65, showing some very enthusiastic reviews.
+- **There are some negativity exists** -> The min score (-3.35) shows a few very negative reviews and there’s a small tail below 0.
+- **Distribution skewed positive** -> Since 75% of reviews are above 1.0, customers are generally satisfied. The shape of the distribution is shifted to the right showing a strong bias towards positivity.
 
 
 ### 4.3 Emotional Analysis
