@@ -279,12 +279,14 @@ Based on the chart above, we noticed that the class distribution for the Recomme
 - Through the creation of synthetic examples from a conditional density estimate of the two classes, it can handle both continuous and categorical data.
 - In addition, the function ovun.sample employs traditional solutions to the class imbalance, such as over-sampling the minority class, under-sampling the majority class, or combining bothover- and under-sampling. 
 
+<br>
+
+### 5.0 Supervised Learning
+### 5.1 Recommended
+### 5.1.3 Classification Tree
 
 
-### 4.3 Exploratory Data Analysis
 
-
-
-### References
+### 7.0 References
 Mhatre. S. (2020). Text Mining and Sentiment Analysis: Analysis with R. Redgate. https://www.red-gate.com/simple-talk/databases/sql-server/bi-sql-server/text-mining-a nd-sentiment-analysis-with-r/
 
