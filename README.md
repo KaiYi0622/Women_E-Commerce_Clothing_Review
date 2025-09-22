@@ -161,7 +161,7 @@ Word Association Network of the Top 20 Most Frequent Words</p>
 ### 4.2 Sentiment Analysis
 Sentiments can be classified as positive, neutral or negative. In order to more accurately convey the strength of the sentiment included in a body of text, they can also be expressed on a numerical scale.
 
-**Syuzhet vector**
+**Syuzhet Vector**
 
 Syuzhet package can be used to measures emotional valence
 > syuzhet_vector = get_sentiment(df$clean_text, method="syuzhet")
@@ -172,7 +172,7 @@ Syuzhet package can be used to measures emotional valence
 
 The meaning of sentiment scores:
 - Positive - Positive sentiment
-- Negetive - Negative sentiment
+- Negative - Negative sentiment
 
 > summary(syuzhet_vector)
 
@@ -186,6 +186,45 @@ To have a better visualisation, we plot a histogram with dentsity:
 - **Strong positivity exists** -> The max score is 7.65, showing some very enthusiastic reviews.
 - **There are some negativity exists** -> The min score (-3.35) shows a few very negative reviews and there’s a small tail below 0.
 - **Distribution skewed positive** -> Since 75% of reviews are above 1.0, customers are generally satisfied. The shape of the distribution is shifted to the right showing a strong bias towards positivity.
+
+**Bing Vector**
+
+Bing vectors classifies each word as positive (+1), neutral (0) or negative (-1).
+
+> head(bing_vector)
+
+<p><img src = "images/Head_Bing.png" style="width:15%;height:auto;">
+
+- The first review has 2 more positive words than negative words (We can propose the first review is positive).
+
+> summary(bing_vector)
+
+<p><img src = "images/Summary_Syuzhet.png" style="width:40%;height:auto;">
+
+Let us have a better visualisation from the distribution and the bar chart.
+<p align="Center"><img src = "images/Bing_Visualisation.png" style="width:50%;height:auto;">
+
+**From the summary and visualisation, we could summarize that:**
+- In terms of satisfication, most customers are **happy and satisfied** with the clothing.
+
+**Affin Vector**
+
+Affin packages able to detect the strength of emotions, which scale range in between -5 (very negative) to +5 (very positive).
+
+> head(afinn_vector)
+
+<p><img src = "images/Head_Affin.png" style="width:20%;height:auto;">
+
+> summary(afinn_vector)
+
+<p><img src = "images/Summary_Affin.png" style="width:40%;height:auto;">
+
+So we have,
+<p align="Center"><img src = "images/Afinn_Visualisation.png" style="width:50%;height:auto;">
+
+**From the summary and visualisation, we could summarize that:**
+
+
 
 
 ### 4.3 Emotional Analysis
