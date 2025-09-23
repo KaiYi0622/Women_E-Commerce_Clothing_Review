@@ -272,7 +272,7 @@ cf.mat.prune = table(pruneTree.pred_1,df.test$Recommended)
 performance(cf.mat.prune, "\nPrune Classification Tree using tree() Test Performance:")
 
 
-#------------------------ Plot ROC Curve ----------------------------
+#------------------------ Plot ROC Curve for Prune----------------------------
 #install.packages("pROC")
 suppressWarnings(library(pROC))
 
@@ -443,6 +443,7 @@ auc_train = auc(roc_train)
 auc_test = auc(roc_test)
 cat("Train data: ", auc_train, "\n")
 cat("Test data: ", auc_test, "\n")
+
 
 
 
