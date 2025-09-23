@@ -281,11 +281,89 @@ Based on the chart above, we noticed that the class distribution for the Recomme
 
 <br>
 
+<!-- ### 4.5 Sxploratory Data Analysis -->
+
 ### 5.0 Supervised Learning
 ### 5.1 Recommended
 ### 5.1.3 Classification Tree
+We have tried different packages: rpart() and tree().
 
-
+<table>
+   <thead>
+      <tr>
+         <th> </th>
+         <th>Using rpart()</th>
+         <th>Using tree()</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>Summary</td>
+         <td>
+            <img src = "images/rpart_Summary.png"><br>
+            <ul><li>As the size of current tree is not very large and  the xerror is the lowest at the latest split. Hence, pruning is omitted.</li></ul>
+         </td>
+         <td>
+            <img src = "images/tree_Summary.png"><br>
+         </td>
+      </tr>
+      <tr>
+         <td>Plot</td>
+         <td>
+            <img src = "images/rpart_Plot.png"><br>
+            Based on the model, it inidicates that:
+            <ul>
+               <li>Customers will return the product as the size of the product is smaller size (which is not fit). Hence, the customer will not recommend the product.</li>
+               <li>Customer feels disappointed and not recommend when the products are not perfect.</li>
+            </ul>
+         </td>
+         <td>
+            <img src = "images/tree_plot.png"><br>
+            Based on the model, it inidicates that:
+            <ul>
+               <li>The result most likely same as rpart() package</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>Train Performance</td>
+         <td>
+            <img src = "images/rpart_Train_Performance.png"><br>
+            <ul>Noticed that:
+               <li>The Kappa and Sensivity values are relative low.</li>
+               <li>The model very poor on detecting the "no" class as the target variable is imbalance.</li>
+            </ul>
+         </td>
+         <td>
+            <img src = "images/tree_Train_Performance.png"><br>
+            <ul>
+               <li>The result is similar with rpart().</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>ROC Curve Plot</td>
+         <td><img src = "images/rpart_ROC.png"></td>
+         <td><img src = "images/tree_ROC.png"></td></td>
+      </tr>
+      <tr>
+         <td>AUC Value</td>
+         <td>
+            <ul>
+               <li>Train data:  0.6114563 </li>
+               <li>Test data:  0.625995</li>
+            </ul>
+         </td>
+         <td>
+            <ul>
+               <li>Train data:  0.7311405</li>
+               <li>Test data:  0.7291646</li>
+            </ul>
+         </td>
+      </tr>
+   </tbody>
+</table>
+<b>Conclusion: tree() package is more suitable for this model.</b>
 
 ### 7.0 References
 Mhatre. S. (2020). Text Mining and Sentiment Analysis: Analysis with R. Redgate. https://www.red-gate.com/simple-talk/databases/sql-server/bi-sql-server/text-mining-a nd-sentiment-analysis-with-r/
