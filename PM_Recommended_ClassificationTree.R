@@ -38,10 +38,15 @@ dev.new()
 plot(tree_model, main = "Decision Tree")
 text(tree_model, use.n = TRUE, all = TRUE, cex = 0.8)
 
-# Alternative plotting
+# Alternative plotting 1
 dev.new()
 prp(x = tree_model, extra = 2, main = "Decision Tree") 
 
+# Alternative plotting 2
+dev.new()
+rpart.plot(tree_model, type = 2, extra = 104, fallen.leaves = TRUE,
+	    main = "Decision Tree for Recommendation",
+            box.palette = "GnBu")
 
 # Train Performance
 tree.train = predict(tree_model,df.train,type="class")
@@ -334,6 +339,7 @@ auc_train = auc(roc_train)
 auc_test = auc(roc_test)
 cat("Train data: ", auc_train, "\n")
 cat("Test data: ", auc_test, "\n")
+
 
 
 
