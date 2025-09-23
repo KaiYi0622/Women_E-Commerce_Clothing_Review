@@ -58,6 +58,47 @@ tree.pred = predict(tree_model,df.test,type="class")
 cf.mat_test = table(tree.pred,df.test$Recommended)
 test_performance = performance(cf.mat_test, "\nClassification Tree using rpart() Test Performance:")
 
+library(caret)
+library(ggplot2)
+library(gridExtra)
+
+tree_cm = confusionMatrix(tree.train, df.train$Recommended, positive = "yes")
+tree_cm_df = as.data.frame(tree_cm$table)
+
+# Plot confusion matrix
+tree_p1 = ggplot(tree_cm_df, aes(x = Reference, y = Prediction, fill = Freq)) +
+   geom_tile() +
+   geom_text(aes(label = Freq), color = "black", size = 6) +  # black text looks better on pastel
+   scale_fill_gradient(low = "#F1F0C0", high = "#B1BCE6") +   # pastel blue to pastel red
+   labs(title = "Confusion Matrix Heatmap", fill = "Count") +
+   theme_minimal()
+
+# Metrics Bar Chart
+metrics_df = data.frame(
+   Metric = c("Accuracy", "Kappa", "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value"),
+   Value = c(tree_cm$overall["Accuracy"], tree_cm$overall["Kappa"], tree_cm$byClass["Sensitivity"], 
+		tree_cm$byClass["Specificity"], tree_cm$byClass["Pos Pred Value"], 
+		tree_cm$byClass["Neg Pred Value"])
+)
+
+# Plot Model Performance Matrix
+tree_p2 = ggplot(metrics_df, aes(x = Metric, y = Value, fill = Metric)) +
+   geom_bar(stat = "identity", width = 0.6, color = "white") +
+   geom_text(aes(label = sprintf("%.2f", Value)), vjust = -0.5, size = 3) +
+   scale_fill_manual(values = c("Accuracy" = "#FFB3BA",
+				"Kappa" = "#FFDFBA",
+                                "Sensitivity" = "#FFFFBA",
+                                "Specificity" = "#BAFFC9",
+				"Pos Pred Value" = "#BAE1FF",
+				"Neg Pred Value" = "#E0BAFF")) + 
+   labs(title = "Model Performance Metrics", y = "Value") +
+   ylim(0, 1) +
+   theme_minimal(base_size = 14) +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7))
+
+dev.new()
+grid.arrange(tree_p1, tree_p2, nrow = 2)
+
 #----------------------- Prune tree model -----------------------
 # Examine the complexity plot
 dev.new()
@@ -72,8 +113,8 @@ tree_probs_train = predict(tree_model, newdata = df.train, type = "prob")
 tree_probs_test = predict(tree_model, newdata = df.test, type = "prob")
 
 # Create ROC objects
-roc_train = roc(df.train$Recommended, tree_probs_train[, "no"])
-roc_test = roc(df.test$Recommended, tree_probs_test[, "no"])
+roc_train = roc(df.train$Recommended, tree_probs_train[, "yes"])
+roc_test = roc(df.test$Recommended, tree_probs_test[, "yes"])
 
 # Plot ROC curves
 plot(roc_train, col = "blue", main = "ROC Curve for rpart()", print.auc = TRUE)
@@ -339,6 +380,7 @@ auc_train = auc(roc_train)
 auc_test = auc(roc_test)
 cat("Train data: ", auc_train, "\n")
 cat("Test data: ", auc_test, "\n")
+
 
 
 
