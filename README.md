@@ -291,7 +291,13 @@ We have tried different packages: rpart() and tree().
 <table>
    <thead>
       <tr>
+         <th></th>
+         <th colspan='2' align='center'>Without Oversampling</th>
+         <th colspan='2' align='center'>Oversampling</th>
+      <tr>
          <th> </th>
+         <th>Using rpart()</th>
+         <th>Using tree()</th>
          <th>Using rpart()</th>
          <th>Using tree()</th>
       </tr>
@@ -305,6 +311,13 @@ We have tried different packages: rpart() and tree().
          </td>
          <td>
             <img src = "images/tree_Summary.png"><br>
+         </td>
+         <td>
+            <img src = "images/Over_rpart_Summary.png"><br>
+            <ul><li>As the size of current tree is not very large and  the xerror is the lowest at the latest split. Hence, pruning is omitted.</li></ul>
+         </td>
+         <td>
+            <img src = "images/Over_tree_Summary.png"><br>
          </td>
       </tr>
       <tr>
@@ -324,6 +337,8 @@ We have tried different packages: rpart() and tree().
                <li>The result most likely same as rpart() package</li>
             </ul>
          </td>
+         <td><img src = "images/Over_rpart_Plot.png"></td>
+         <td><img src = "images/Over_tree_Plot.png"></td>
       </tr>
       <tr>
          <td>Train Performance</td>
@@ -340,11 +355,32 @@ We have tried different packages: rpart() and tree().
                <li>The result is similar with rpart().</li>
             </ul>
          </td>
+         <td>
+            <img src = "images/Over_rpart_Train_Performance.png"><br>
+            <ul>Noticed that:
+               <li>The Kappa is relative low but Sensitivity increases after oversampled.</li>
+            </ul>
+         </td>
+         <td>
+            <img src = "images/Over_tree_Train_Performance.png"><br>
+            <ul>
+               <li>The result is similar with rpart().</li>
+            </ul>
+         </td>
+      </tr>
+      <tr>
+         <td>Test Performance</td>
+         <td><img src = "images/rpart_Test_Performance.png"></td>
+         <td><img src = "images/tree_Test_Performance.png"></td>
+         <td><img src = "images/Over_rpart_Test_Performance.png"></td>
+         <td><img src = "images/Over_tree_Test_Performance.png"></td>
       </tr>
       <tr>
          <td>ROC Curve Plot</td>
          <td><img src = "images/rpart_ROC.png"></td>
-         <td><img src = "images/tree_ROC.png"></td></td>
+         <td><img src = "images/tree_ROC.png"></td>
+         <td><img src = "images/Over_rpart_ROC.png"></td>
+         <td><img src = "images/Over_tree_ROC.png"></td>
       </tr>
       <tr>
          <td>AUC Value</td>
@@ -360,10 +396,26 @@ We have tried different packages: rpart() and tree().
                <li>Test data:  0.7291646</li>
             </ul>
          </td>
+         <td>
+            <ul>
+               <li>Train data:  0.7810421 </li>
+               <li>Test data:  0.7597905</li>
+            </ul>
+         </td>
+         <td>
+            <ul>
+               <li>Train data:  0.7613131</li>
+               <li>Test data:  0.7492651</li>
+            </ul>
+         </td>
       </tr>
    </tbody>
 </table>
 <b>Conclusion: tree() package is more suitable for this model.</b>
+
+<br>
+
+
 
 ### 7.0 References
 Mhatre. S. (2020). Text Mining and Sentiment Analysis: Analysis with R. Redgate. https://www.red-gate.com/simple-talk/databases/sql-server/bi-sql-server/text-mining-a nd-sentiment-analysis-with-r/
