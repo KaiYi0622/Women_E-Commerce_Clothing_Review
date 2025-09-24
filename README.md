@@ -421,7 +421,7 @@ After comparing the models, we noticed that:
 
 <br>
 
-### 5.1.4 Classification Tree
+### 5.1.4 Sector Vector Machine (SVM)
 
 
 ### 7.0 References
