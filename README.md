@@ -344,7 +344,7 @@ We have tried different packages: rpart() and tree().
          <td>Train Performance</td>
          <td>
             <img src = "images/rpart_Train_Performance.png"><br>
-            <ul>Noticed that:
+            Noticed that:<ul>
                <li>The Kappa and Sensivity values are relative low.</li>
                <li>The model very poor on detecting the "no" class as the target variable is imbalance.</li>
             </ul>
@@ -357,15 +357,13 @@ We have tried different packages: rpart() and tree().
          </td>
          <td>
             <img src = "images/Over_rpart_Train_Performance.png"><br>
-            <ul>Noticed that:
+            Noticed that:
+            <ul>
                <li>The Kappa is relative low but Sensitivity increases after oversampled.</li>
             </ul>
          </td>
          <td>
-            <img src = "images/Over_tree_Train_Performance.png"><br>
-            <ul>
-               <li>The result is similar with rpart().</li>
-            </ul>
+            <img src = "images/Over_tree_Train_Performance.png">
          </td>
       </tr>
       <tr>
@@ -411,10 +409,19 @@ We have tried different packages: rpart() and tree().
       </tr>
    </tbody>
 </table>
-<b>Conclusion: tree() package is more suitable for this model.</b>
+
+**Conclusion:**
+
+After comparing the models, we noticed that:
+- Before oversampling, both packages' model have high accuracy(>80%). However, the sensitivity for both packages are relative low whereas specificity are relative high (>90%), indicating that the models are biased towards class 'Yes'.
+- After oversampling, the accuracy dropped significantly expecially for tree() package. In sensitivity and specificity, rpart() performed better which has a more balanced classification on the recommendation 'yes' and 'no'.
+- The AUC results slightly increase after oversampled, which suggests that the model able to classify better on the recommendation.
+
+**Overall, we can suggest that rpart() with oversampling is the best model among these 4 models.**
 
 <br>
 
+### 5.1.4 Classification Tree
 
 
 ### 7.0 References
